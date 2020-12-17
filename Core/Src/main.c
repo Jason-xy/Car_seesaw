@@ -96,6 +96,8 @@ int main(void)
   MX_I2C2_Init();
   MX_TIM2_Init();
   MX_USART1_UART_Init();
+  MX_TIM1_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 	OLED_Init();
 	OLED_Clear();
@@ -104,6 +106,9 @@ int main(void)
 	Motor_Init();
 	OLED_Clear();
 	
+	HAL_TIM_IC_Start_IT(&htim1,TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
+	TIM3->CCR1=5000;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -111,10 +116,6 @@ int main(void)
 	char buf[50];
   while (1)
   {
-		MPU_Get_Gyroscope(&Gyro_x,&Gyro_y,&Gyro_z);
-		AngleCalculate();
-		AngleControl();
-		MotorOutput();
 		sprintf(buf,"Gyro_x= %+02.2f",Gyro_x/16.4f);
 		OLED_ShowString(8,2,(uint8_t*)buf,16);
 		sprintf(buf,"CarAngle=%+02.2f",CarAngle);
@@ -124,6 +125,19 @@ int main(void)
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
+}
+
+//5ms执行一次数据更新任务
+//使用200Hz的PWM脉冲提供任务时钟，数据时间间隔0.005s。
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+	if(htim->Instance==TIM1)
+	{
+		MPU_Get_Gyroscope(&Gyro_x,&Gyro_y,&Gyro_z);
+		AngleCalculate();
+		AngleControl();
+		MotorOutput();
+	}
 }
 
 /**

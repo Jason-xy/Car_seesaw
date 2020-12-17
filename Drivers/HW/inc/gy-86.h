@@ -3,7 +3,7 @@
   * 文件名程: gy-86.h 
   * 作    者: Jason_xy
   * 个人博客：https://jason-xy.cn
-  * 版    本: V1.1
+  * 版    本: V1.1.1
   * 编写日期: 2020-10-2
   * 功    能: GY-86初始化
   ******************************************************************************
@@ -12,6 +12,8 @@
   * 2.需要实现配置好I2C驱动。
   * 3.需要事先配置好MPU6050。
   * 4.需要事先配置好HMC5883L。
+  * 5.陀螺仪校准数据计算公式 Gx=Gyro_x-Gyro_xFix。
+  * 6.地磁仪校准数据计算公式 Mx=MagScaleX*Mag_x-offsetMagX。
   * 
   * 功能：
   * 1.MPU6050初始化。
@@ -23,23 +25,36 @@
   * 7.温度计数据获取和解析。
   * 8.地磁仪数据获取。
   * 9.宏定义所需寄存器地址。
-  * 10.陀螺仪零飘矫正。
+  * 10.陀螺仪零偏矫正。
+  * 11.磁力计校准。
+  * 12.陀螺仪显式数据输出。
+  * 13.磁力计显式数据输出。
   * 
   * 更新：
   * 2020-12-15
   * 1.数据获取修改uint16_t为short。
-  * 2.添加陀螺仪零飘矫正。
+  * 2.添加陀螺仪零偏矫正。
+  * 2020-12-16
+  * 1.温度传感器数据Bug修复。
+  * 2020-12-17
+  * 1.添加磁力计校准，8字校准方式。
+  * 2.磁力计显式数据读出。
+  * 3.陀螺仪显式数据读出。
   ******************************************************************************
   */
 
 #ifndef __GY_86_H__
 #define __GY_86_H__
 
-#include "stm32f1xx_hal.h"
+#include "stm32f4xx_hal.h"
 #include "i2c.h"
+#include "math.h"
 
-#define MPU6050_ADD	0xD0	                   //器件地址（AD0悬空或低电平时地址是0xD0，为高电平时为0xD2，7位地址：1101 000x）
-#define MPU_I2C     (hi2c2)                      //i2c句柄
+#define M_PI 				3.1415926
+
+#define MPU6050_ADD	0xD0	                    //器件地址（AD0悬空或低电平时地址是0xD0，为高电平时为0xD2，7位地址：1101 000x）
+#define MPU_I2C     (hi2c2)                   //i2c句柄
+#define MagnetcDeclination          1.16     //成都市地磁倾角
 
 #define MPU6050_RA_XG_OFFS_TC       0x00 
 #define MPU6050_RA_YG_OFFS_TC       0x01 
@@ -180,8 +195,18 @@
 #define HMC_WRITE 0x3C  //HMC的i2c写地址
 #define HMC_READ  0x3D	//HMC的i2c读地址
 
+//校准参数
 extern short Gyro_xFix,Gyro_yFix,Gyro_zFix;
+extern short offsetMagX,offsetMagY,offsetMagZ;
+extern float MagScaleX,MagScaleY,MagScaleZ;
+
+//原始数据变量
 extern short Gyro_x,Gyro_y,Gyro_z;
+extern short Accel_x,Accel_y,Accel_z;
+extern short Mag_x,Mag_y,Mag_z;
+
+//显式数据变量
+extern short Ax,Ay,Az;//单位：m/s^2
 
 uint8_t MPU_Write_Len(uint8_t reg,uint8_t len,uint8_t *buf);    //IIC连续写
 uint8_t MPU_Read_Len(uint8_t reg,uint8_t len,uint8_t *buf);     //IIC连续读 
@@ -205,9 +230,12 @@ uint8_t MPU_Get_Gyroscope(short *gx,short *gy,short *gz);
 uint8_t MPU_Get_Accelerometer(short *ax,short *ay,short *az);
 uint8_t READ_HMCALL(short* x,short* y, short* z);
 float MPU_Get_Temperature(void);
+void read_hmc_degree(short *x,short *y,short* z);
+void read_Gyroscope_DPS(short *x,short *y,short* z);
 
 void GY86_SelfTest(void);
 void Gyro_Test(void);
+void Mag_Test(void);
 
 
 //void MPU6050_READ(u16* n);   
