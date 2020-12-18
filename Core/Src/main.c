@@ -100,6 +100,7 @@ int main(void)
 	OLED_Clear();
 	OLED_ShowString(28,3,(uint8_t*)"Car_Seesaw",16);
 	GY86_Init();
+	Get_Init_Gravity();
 	Motor_Init();
 	OLED_Clear();
 	

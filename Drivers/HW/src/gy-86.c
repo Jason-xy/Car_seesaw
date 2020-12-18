@@ -40,6 +40,8 @@
   * 1.添加磁力计校准，8字校准方式。
   * 2.磁力计显式数据读出。
   * 3.陀螺仪显式数据读出。
+  * 2020-12-18
+  * 1.加速度计显式读出。
   ******************************************************************************
   */
 #include "gy-86.h" 
@@ -55,7 +57,7 @@ short Accel_x=0,Accel_y=0,Accel_z=0;
 short Mag_x=0,Mag_y=0,Mag_z=0;
 
 //显式数据变量
-short Ax=0,Ay=0,Az=0;//单位：m/s^2
+float Ax=0,Ay=0,Az=0;//单位：m/s^2
 short Gx=0,Gy=0,Gz=0;//单位°/s
 
 //IIC写一个字节 
@@ -433,17 +435,19 @@ void read_hmc_degree(short *M_xy,short *M_yz,short* M_zx)
 }
 
 //陀螺仪显式数据读取。单位：°/s
-void read_Gyroscope_DPS(short *x,short *y,short* z)
+void read_Gyroscope_DPS()
 {
 	MPU_Get_Gyroscope(&Gyro_x,&Gyro_y,&Gyro_z);
-  *x=(  Gyro_x-Gyro_xFix)/131.2f;
-  *y=(Gyro_y-Gyro_yFix)/131.2f;
-  *z=(Gyro_z-Gyro_zFix)/131.2f;
+  Gx=( Gyro_x-Gyro_xFix)/131.2f;
+  Gy=(Gyro_y-Gyro_yFix)/131.2f;
+  Gz=(Gyro_z-Gyro_zFix)/131.2f;
 }
 
 //加速度计显式数据读取。 单位：m/s^2
-void read_Accelerometer_MPS(short *x,short * y, short* z)
+void read_Accelerometer_MPS()
 {
-  MPU_Get_Accelerometer(x,y,z);
-  
+  MPU_Get_Accelerometer(&Accel_x,&Accel_y,&Accel_z);
+  Ax=Accel_x/1673.469f;
+  Ay=Accel_y/1673.469f;
+  Az=Accel_z/1673.469f;
 }

@@ -1,18 +1,19 @@
 /**
   ******************************************************************************
-  * 文件名程: motor.c 
+  * 文件名程: control.h
   * 作    者: Jason_xy
   * 个人博客：https://jason-xy.cn
   * 版    本: V1.0
   * 编写日期: 2020-12-15
-  * 功    能: 减速电机控制
+  * 功    能: PID控制
   ******************************************************************************
   * 说明：
-  * 1.需要提前设置好TIM。
+  * 1.需要提前配置好gy-86。
+  * 2.需要提前配置好电机。
   * 
   * 功能：
-  * 1.电机初始化。
-  * 2.改变电机速度。
+  * 1.角度环控制。
+  * 2.利用重力校准。
   ******************************************************************************
   */
 
@@ -32,6 +33,13 @@ typedef struct {
     float D;
 }PID;
 
+//为真实加速度的100倍
+typedef struct{
+    short ax;
+    short ay;
+    short az;
+}Acceleromter_accstruct;
+
 extern PID AngleRingPID;
 extern float GyroAngleSpeed;
 extern float CarAngle;
@@ -41,6 +49,10 @@ extern float MotorOut;
 void AngleCalculate(void);
 void AngleControl(void);
 void MotorOutput(void);
+
+void Get_Init_Gravity(void);
+void Gyroscope_Balance_Calibration(void);
+void Acceleromter_Balance_Calibration(void);
 
 #endif /* __CONTROL_H__ */
 
