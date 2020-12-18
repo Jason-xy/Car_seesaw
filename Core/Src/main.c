@@ -49,7 +49,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-short Gx;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

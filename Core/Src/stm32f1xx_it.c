@@ -207,8 +207,7 @@ void SysTick_Handler(void)
 void TIM1_UP_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_UP_IRQn 0 */
-	read_Gyroscope_DPS(&Gyro_x,&Gyro_y,&Gyro_z);
-	Gx=Gyro_x;
+	read_Gyroscope_DPS(&Gx,&Gy,&Gz);
 	AngleCalculate();
 	AngleControl();
 	MotorOutput();

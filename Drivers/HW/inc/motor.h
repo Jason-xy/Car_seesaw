@@ -28,7 +28,7 @@
 
 #define MOTOR_OUT_MAX 100
 #define MOTOR_OUT_MIN -100
-#define MOTOR_OUT_DEAD_VAL 5
+#define MOTOR_OUT_DEAD_VAL  25
 
 void SetMotorDutyCycle(float DutyCycle);//DutyCycle > 0 正转; DutyCycle < 0 反转; DutyCycle = 0 停转
 void Motor_Init(void);

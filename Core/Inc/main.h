@@ -42,7 +42,7 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-extern short Gx;
+
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/

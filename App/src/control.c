@@ -18,7 +18,7 @@
  #include "control.h"
 
  //全局变量
-PID AngleRingPID={50,0,1};
+PID AngleRingPID={4.8,0,1};
 float GyroAngleSpeed=0;
 float CarAngle=0;
 float AngleControlOut=0;
@@ -30,7 +30,7 @@ void AngleCalculate(void)
     //角速度
 	//范围为250deg/s时，换算关系：131.2 LSB/(deg/s)
 	//使用显式读出，无需单位换算。
-    GyroAngleSpeed=Gyro_x;
+    GyroAngleSpeed=Gx;
 
     //角度【时间差根据实际测量计算】
     CarAngle=CarAngle+GyroAngleSpeed*0.12857f; 
@@ -40,7 +40,7 @@ void AngleCalculate(void)
 //角度环控制
 void AngleControl(void)
 {
-    AngleControlOut=(CAR_ANGLE_SET-CarAngle)*AngleRingPID.P*5+\
+    AngleControlOut=(CAR_ANGLE_SET-CarAngle)*AngleRingPID.P*1+\
     (CAR_ANGLE_SPEED_SET-GyroAngleSpeed)*(AngleRingPID.D);
 }
 
@@ -50,9 +50,9 @@ void MotorOutput(void)
     MotorOut=AngleControlOut;
 
     //添加死区常数
-    if(MotorOut>0)
+    if(MotorOut>1)
         MotorOut+=MOTOR_OUT_DEAD_VAL;
-    else if(MotorOut<0)
+    else if(MotorOut<-1)
         MotorOut-=MOTOR_OUT_DEAD_VAL;
 
     //饱和处理

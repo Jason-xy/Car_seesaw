@@ -21,6 +21,8 @@ void Motor_Init(void)
 {
     HAL_TIM_PWM_Start(&MOTOR_TIM,TIM_CHANNEL_1);
 		HAL_TIM_PWM_Start(&MOTOR_TIM,TIM_CHANNEL_2);
+	__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_1,0);
+	__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_2,0);
 //    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_RESET);
 //		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_RESET);
 }
@@ -41,14 +43,16 @@ void SetMotorDutyCycle(float DutyCycle)
 	if(DutyCycle<0)
 	{
 		DutyCycle = (-DutyCycle);
-		HAL_TIM_PWM_Start(&MOTOR_TIM,TIM_CHANNEL_2);
-		__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_2,(int)DutyCycle*10);
-		HAL_TIM_PWM_Stop(&MOTOR_TIM,TIM_CHANNEL_1);
+		//HAL_TIM_PWM_Start(&MOTOR_TIM,TIM_CHANNEL_2);
+		__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_2,(int)DutyCycle*0.8);
+		//HAL_TIM_PWM_Stop(&MOTOR_TIM,TIM_CHANNEL_1);
+		__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_1,0);
 	}
 	else
 	{
-		HAL_TIM_PWM_Start(&MOTOR_TIM,TIM_CHANNEL_1);
-		__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_1,(int)DutyCycle*10);
-		HAL_TIM_PWM_Stop(&MOTOR_TIM,TIM_CHANNEL_2);
+		//HAL_TIM_PWM_Start(&MOTOR_TIM,TIM_CHANNEL_1);
+		__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_1,(int)DutyCycle*0.8);
+		//HAL_TIM_PWM_Stop(&MOTOR_TIM,TIM_CHANNEL_2);
+		__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_2,0);
 	}
 }

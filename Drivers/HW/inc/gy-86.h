@@ -207,6 +207,7 @@ extern short Mag_x,Mag_y,Mag_z;
 
 //显式数据变量
 extern short Ax,Ay,Az;//单位：m/s^2
+extern short Gx,Gy,Gz;//单位：°/s
 
 uint8_t MPU_Write_Len(uint8_t reg,uint8_t len,uint8_t *buf);    //IIC连续写
 uint8_t MPU_Read_Len(uint8_t reg,uint8_t len,uint8_t *buf);     //IIC连续读 
@@ -232,6 +233,7 @@ uint8_t READ_HMCALL(short* x,short* y, short* z);
 float MPU_Get_Temperature(void);
 void read_hmc_degree(short *x,short *y,short* z);
 void read_Gyroscope_DPS(short *x,short *y,short* z);
+void read_Accelerometer_MPS(short *x,short * y, short* z);
 
 void GY86_SelfTest(void);
 void Gyro_Test(void);

@@ -56,6 +56,7 @@ short Mag_x=0,Mag_y=0,Mag_z=0;
 
 //显式数据变量
 short Ax=0,Ay=0,Az=0;//单位：m/s^2
+short Gx=0,Gy=0,Gz=0;//单位：°/s
 
 //IIC写一个字节 
 //reg:寄存器地址
@@ -438,4 +439,10 @@ void read_Gyroscope_DPS(short *x,short *y,short* z)
   *x=(Gyro_x-Gyro_xFix)/131.2f;
   *y=(Gyro_y-Gyro_yFix)/131.2f;
   *z=(Gyro_z-Gyro_zFix)/131.2f;
+}
+
+//加速度计显式数据读取。 单位：m/s^2
+void read_Accelerometer_MPS(short *x,short * y, short* z)
+{
+  
 }
