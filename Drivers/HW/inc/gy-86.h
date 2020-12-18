@@ -46,7 +46,7 @@
 #ifndef __GY_86_H__
 #define __GY_86_H__
 
-#include "stm32f4xx_hal.h"
+#include "stm32f1xx_hal.h"
 #include "i2c.h"
 #include "math.h"
 

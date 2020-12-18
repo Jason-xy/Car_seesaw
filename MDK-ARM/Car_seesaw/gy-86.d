@@ -31,3 +31,4 @@ car_seesaw\gy-86.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 car_seesaw\gy-86.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 car_seesaw\gy-86.o: ../Core/Inc/i2c.h
 car_seesaw\gy-86.o: ../Core/Inc/main.h
+car_seesaw\gy-86.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

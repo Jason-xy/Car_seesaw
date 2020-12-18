@@ -34,8 +34,7 @@ car_seesaw\main.o: ../Core/Inc/tim.h
 car_seesaw\main.o: ../Core/Inc/usart.h
 car_seesaw\main.o: ../Core/Inc/gpio.h
 car_seesaw\main.o: ..\Drivers\HW\inc\gy-86.h
+car_seesaw\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 car_seesaw\main.o: ..\Drivers\HW\inc\oled.h
-car_seesaw\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 car_seesaw\main.o: ..\Drivers\HW\inc\motor.h
 car_seesaw\main.o: ..\App\inc\control.h
-car_seesaw\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

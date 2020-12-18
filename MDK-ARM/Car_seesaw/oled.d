@@ -1,7 +1,6 @@
 car_seesaw\oled.o: ..\Drivers\HW\src\oled.c
 car_seesaw\oled.o: ..\Drivers\HW\inc\oled.h
 car_seesaw\oled.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-car_seesaw\oled.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 car_seesaw\oled.o: ../Core/Inc/i2c.h
 car_seesaw\oled.o: ../Core/Inc/main.h
 car_seesaw\oled.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h

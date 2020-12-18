@@ -49,8 +49,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-int timeCounter = 0;
-int SoftTick = 0;
+short Gx;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -97,7 +96,6 @@ int main(void)
   MX_TIM2_Init();
   MX_USART1_UART_Init();
   MX_TIM1_Init();
-  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 	OLED_Init();
 	OLED_Clear();
@@ -106,38 +104,23 @@ int main(void)
 	Motor_Init();
 	OLED_Clear();
 	
-	HAL_TIM_IC_Start_IT(&htim1,TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
-	TIM3->CCR1=5000;
+	HAL_TIM_Base_Start_IT(&htim1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	char buf[50];
+	//char buf[50];
   while (1)
   {
-		sprintf(buf,"Gyro_x= %+02.2f",Gyro_x/16.4f);
-		OLED_ShowString(8,2,(uint8_t*)buf,16);
-		sprintf(buf,"CarAngle=%+02.2f",CarAngle);
-		OLED_ShowString(8,4,(uint8_t*)buf,16);
+		//sprintf(buf,"Gyro_x= %+02.2f",Gyro_x/16.4f);
+		OLED_ShowNum(48,2,Gx,4,16);
+		//sprintf(buf,"CarAngle=%+02.2f",CarAngle);
+		OLED_ShowNum(48,4,CarAngle,4,16);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
-}
-
-//5ms执行一次数据更新任务
-//使用200Hz的PWM脉冲提供任务时钟，数据时间间隔0.005s。
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-{
-	if(htim->Instance==TIM1)
-	{
-		MPU_Get_Gyroscope(&Gyro_x,&Gyro_y,&Gyro_z);
-		AngleCalculate();
-		AngleControl();
-		MotorOutput();
-	}
 }
 
 /**
@@ -179,15 +162,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void SoftTimerCountDown(void)
-{
-	SoftTick++;
-	if(SoftTick == 9000)
-	{
-		timeCounter++;
-		SoftTick=0;
-	}
-}
+
 /* USER CODE END 4 */
 
 /**

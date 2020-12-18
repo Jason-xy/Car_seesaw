@@ -28,11 +28,12 @@ float MotorOut=0;
 void AngleCalculate(void)
 {
     //角速度
-	//范围为2000deg/s时，换算关系：16.4 LSB/(deg/s)
-    GyroAngleSpeed=Gyro_x/16.4f;
+	//范围为250deg/s时，换算关系：131.2 LSB/(deg/s)
+	//使用显式读出，无需单位换算。
+    GyroAngleSpeed=Gyro_x;
 
-    //角度
-    CarAngle=CarAngle+GyroAngleSpeed*0.005; 
+    //角度【时间差根据实际测量计算】
+    CarAngle=CarAngle+GyroAngleSpeed*0.12857f; 
     
 }
 

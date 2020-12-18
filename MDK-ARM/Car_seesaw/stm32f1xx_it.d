@@ -32,9 +32,8 @@ car_seesaw\stm32f1xx_it.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uar
 car_seesaw\stm32f1xx_it.o: ../Core/Inc/stm32f1xx_it.h
 car_seesaw\stm32f1xx_it.o: ..\Drivers\HW\inc\gy-86.h
 car_seesaw\stm32f1xx_it.o: ../Core/Inc/i2c.h
+car_seesaw\stm32f1xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 car_seesaw\stm32f1xx_it.o: ..\Drivers\HW\inc\oled.h
-car_seesaw\stm32f1xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 car_seesaw\stm32f1xx_it.o: ..\Drivers\HW\inc\motor.h
 car_seesaw\stm32f1xx_it.o: ../Core/Inc/tim.h
 car_seesaw\stm32f1xx_it.o: ..\App\inc\control.h
-car_seesaw\stm32f1xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

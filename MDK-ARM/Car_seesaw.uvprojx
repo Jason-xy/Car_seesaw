@@ -10,7 +10,7 @@
       <TargetName>Car_seesaw</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
+      <pCCUsed>5060960::V5.06 update 7 (build 960)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;          ../Drivers/STM32F1xx_HAL_Driver/Inc;          ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;          ../Drivers/CMSIS/Device/ST/STM32F1xx/Include;          ../Drivers/CMSIS/Include;          ..\Drivers\HW\inc;          ..\App\inc</IncludePath>
+              <IncludePath>../Core/Inc;             ../Drivers/STM32F1xx_HAL_Driver/Inc;             ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;             ../Drivers/CMSIS/Device/ST/STM32F1xx/Include;             ../Drivers/CMSIS/Include;             ..\Drivers\HW\inc;             ..\App\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -574,11 +574,6 @@
     <Layers>
       <Layer>
         <LayName>Car_seesaw</LayName>
-        <LayDesc></LayDesc>
-        <LayUrl></LayUrl>
-        <LayKeys></LayKeys>
-        <LayCat></LayCat>
-        <LayLic></LayLic>
         <LayTarg>0</LayTarg>
         <LayPrjMark>1</LayPrjMark>
       </Layer>

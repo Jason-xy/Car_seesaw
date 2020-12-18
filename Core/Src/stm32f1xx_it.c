@@ -186,14 +186,7 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-//	if(timeCounter%5==0)
-//	{
-//		MPU_Get_Gyroscope(&Gyro_x,&Gyro_y,&Gyro_z);
-//		AngleCalculate();
-//		AngleControl();
-//		MotorOutput();
-//		timeCounter=0;
-//	}
+
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
@@ -209,17 +202,21 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles TIM1 capture compare interrupt.
+  * @brief This function handles TIM1 update interrupt.
   */
-void TIM1_CC_IRQHandler(void)
+void TIM1_UP_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM1_CC_IRQn 0 */
-
-  /* USER CODE END TIM1_CC_IRQn 0 */
+  /* USER CODE BEGIN TIM1_UP_IRQn 0 */
+	read_Gyroscope_DPS(&Gyro_x,&Gyro_y,&Gyro_z);
+	Gx=Gyro_x;
+	AngleCalculate();
+	AngleControl();
+	MotorOutput();
+  /* USER CODE END TIM1_UP_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
-  /* USER CODE BEGIN TIM1_CC_IRQn 1 */
+  /* USER CODE BEGIN TIM1_UP_IRQn 1 */
 
-  /* USER CODE END TIM1_CC_IRQn 1 */
+  /* USER CODE END TIM1_UP_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

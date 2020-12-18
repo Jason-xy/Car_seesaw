@@ -42,8 +42,7 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-extern int timeCounter;
-extern int SoftTick;
+extern short Gx;
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
