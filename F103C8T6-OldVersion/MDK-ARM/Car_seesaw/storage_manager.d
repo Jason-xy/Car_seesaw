@@ -1,0 +1,14 @@
+car_seesaw\storage_manager.o: ..\DMP\mllite\storage_manager.c
+car_seesaw\storage_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+car_seesaw\storage_manager.o: ..\DMP\mllite\storage_manager.h
+car_seesaw\storage_manager.o: ..\DMP\driver\include\mltypes.h
+car_seesaw\storage_manager.o: ..\DMP\driver\include\stdint_invensense.h
+car_seesaw\storage_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+car_seesaw\storage_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\errno.h
+car_seesaw\storage_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\limits.h
+car_seesaw\storage_manager.o: ..\DMP\driver\include\log.h
+car_seesaw\storage_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+car_seesaw\storage_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+car_seesaw\storage_manager.o: ..\DMP\mllite\ml_math_func.h
+car_seesaw\storage_manager.o: ..\DMP\driver\include\mlmath.h
+car_seesaw\storage_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

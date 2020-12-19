@@ -1,0 +1,14 @@
+car_seesaw\empl_outputs.o: ..\DMP\eMPL-hal\eMPL_outputs.c
+car_seesaw\empl_outputs.o: ..\DMP\eMPL-hal\eMPL_outputs.h
+car_seesaw\empl_outputs.o: ..\DMP\driver\include\mltypes.h
+car_seesaw\empl_outputs.o: ..\DMP\driver\include\stdint_invensense.h
+car_seesaw\empl_outputs.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+car_seesaw\empl_outputs.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+car_seesaw\empl_outputs.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\errno.h
+car_seesaw\empl_outputs.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\limits.h
+car_seesaw\empl_outputs.o: ..\DMP\mllite\ml_math_func.h
+car_seesaw\empl_outputs.o: ..\DMP\driver\include\mlmath.h
+car_seesaw\empl_outputs.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+car_seesaw\empl_outputs.o: ..\DMP\mllite\start_manager.h
+car_seesaw\empl_outputs.o: ..\DMP\mllite\data_builder.h
+car_seesaw\empl_outputs.o: ..\DMP\mllite\results_holder.h

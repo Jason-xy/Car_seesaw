@@ -1,0 +1,11 @@
+car_seesaw\start_manager.o: ..\DMP\mllite\start_manager.c
+car_seesaw\start_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+car_seesaw\start_manager.o: ..\DMP\driver\include\log.h
+car_seesaw\start_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+car_seesaw\start_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+car_seesaw\start_manager.o: ..\DMP\mllite\start_manager.h
+car_seesaw\start_manager.o: ..\DMP\driver\include\mltypes.h
+car_seesaw\start_manager.o: ..\DMP\driver\include\stdint_invensense.h
+car_seesaw\start_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+car_seesaw\start_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\errno.h
+car_seesaw\start_manager.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\limits.h

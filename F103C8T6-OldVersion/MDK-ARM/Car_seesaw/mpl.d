@@ -1,0 +1,16 @@
+car_seesaw\mpl.o: ..\DMP\mllite\mpl.c
+car_seesaw\mpl.o: ..\DMP\mllite\storage_manager.h
+car_seesaw\mpl.o: ..\DMP\driver\include\mltypes.h
+car_seesaw\mpl.o: ..\DMP\driver\include\stdint_invensense.h
+car_seesaw\mpl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+car_seesaw\mpl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+car_seesaw\mpl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\errno.h
+car_seesaw\mpl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\limits.h
+car_seesaw\mpl.o: ..\DMP\driver\include\log.h
+car_seesaw\mpl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+car_seesaw\mpl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+car_seesaw\mpl.o: ..\DMP\mllite\mpl.h
+car_seesaw\mpl.o: ..\DMP\mllite\start_manager.h
+car_seesaw\mpl.o: ..\DMP\mllite\data_builder.h
+car_seesaw\mpl.o: ..\DMP\mllite\results_holder.h
+car_seesaw\mpl.o: ..\DMP\driver\include\mlinclude.h

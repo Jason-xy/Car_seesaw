@@ -1,0 +1,11 @@
+car_seesaw\ml_math_func.o: ..\DMP\mllite\ml_math_func.c
+car_seesaw\ml_math_func.o: ..\DMP\driver\include\mlmath.h
+car_seesaw\ml_math_func.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+car_seesaw\ml_math_func.o: ..\DMP\mllite\ml_math_func.h
+car_seesaw\ml_math_func.o: ..\DMP\driver\include\mltypes.h
+car_seesaw\ml_math_func.o: ..\DMP\driver\include\stdint_invensense.h
+car_seesaw\ml_math_func.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+car_seesaw\ml_math_func.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+car_seesaw\ml_math_func.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\errno.h
+car_seesaw\ml_math_func.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\limits.h
+car_seesaw\ml_math_func.o: ..\DMP\driver\include\mlinclude.h
