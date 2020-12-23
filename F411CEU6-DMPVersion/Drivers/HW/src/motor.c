@@ -44,14 +44,14 @@ void SetMotorDutyCycle(float DutyCycle)
 	{
 		DutyCycle = (-DutyCycle);
 		//HAL_TIM_PWM_Start(&MOTOR_TIM,TIM_CHANNEL_2);
-		__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_2,(int)DutyCycle*0.8);
+		__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_2,(int)DutyCycle);
 		//HAL_TIM_PWM_Stop(&MOTOR_TIM,TIM_CHANNEL_1);
 		__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_1,0);
 	}
 	else
 	{
 		//HAL_TIM_PWM_Start(&MOTOR_TIM,TIM_CHANNEL_1);
-		__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_1,(int)DutyCycle*0.8);
+		__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_1,(int)DutyCycle);
 		//HAL_TIM_PWM_Stop(&MOTOR_TIM,TIM_CHANNEL_2);
 		__HAL_TIM_SetCompare(&MOTOR_TIM,TIM_CHANNEL_2,0);
 	}

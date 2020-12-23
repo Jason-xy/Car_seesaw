@@ -30,6 +30,8 @@
 #include "oled.h"
 #include "motor.h"
 #include "control.h"
+#include "esp8266.h"
+#include "data_transfer.h"
 #include "inv_mpu.h"
 #include "inv_mpu_dmp_motion_driver.h" 
 /* USER CODE END Includes */
@@ -102,18 +104,20 @@ int main(void)
 	OLED_Init();
 	OLED_Clear();
 	OLED_ShowString(28,3,(uint8_t*)"Car_Seesaw",16);
-	mpu_dmp_init();
+	//esp8266_init();
 	Motor_Init();
 	OLED_Clear();
 	
+	mpu_dmp_init();
 	HAL_TIM_Base_Start_IT(&htim1);
   /* USER CODE END 2 */
-	
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
 		OLED_ShowNum(48,4,roll,4,16);
+//		ANO_DT_Send_Status(roll,0,0,1,122,233);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

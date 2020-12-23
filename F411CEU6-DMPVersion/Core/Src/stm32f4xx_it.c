@@ -27,6 +27,7 @@
 #include "oled.h"
 #include "motor.h"
 #include "control.h"
+#include "data_transfer.h"
 #include "inv_mpu.h"
 #include "inv_mpu_dmp_motion_driver.h" 
 /* USER CODE END Includes */
@@ -48,7 +49,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+short SoftTick=0;
+uint8_t RxBuffer[50];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -63,6 +65,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim1;
+extern UART_HandleTypeDef huart1;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -215,11 +218,26 @@ void TIM1_UP_TIM10_IRQHandler(void)
 	AngleCalculate();
 	AngleControl();
 	MotorOutput();
+	ANO_DT_Send_Status(roll,0,0,1,122,233);
   /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
   /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
 
   /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USART1 global interrupt.
+  */
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
+	
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
+
+  /* USER CODE END USART1_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

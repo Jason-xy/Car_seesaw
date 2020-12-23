@@ -41,5 +41,6 @@ car_dmp\stm32f4xx_it.o: ..\Drivers\HW\inc\motor.h
 car_dmp\stm32f4xx_it.o: ../Core/Inc/tim.h
 car_dmp\stm32f4xx_it.o: ..\App\inc\control.h
 car_dmp\stm32f4xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+car_dmp\stm32f4xx_it.o: ..\App\inc\data_transfer.h
 car_dmp\stm32f4xx_it.o: ..\DMP\inv_mpu.h
 car_dmp\stm32f4xx_it.o: ..\DMP\inv_mpu_dmp_motion_driver.h

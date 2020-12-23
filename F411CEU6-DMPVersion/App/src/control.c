@@ -19,8 +19,10 @@
  #include "control.h"
 
 //全局变量
-PID AngleRingPID={4,0,1};
+PID AngleRingPID={2.5,-1,1}; //3，-1，1
 float GyroAngleSpeed=0;
+float GyroAngleSpeedBefore=0;
+float GyroAccle=0;
 float CarAngle=0;
 float AngleControlOut=0;
 float MotorOut=0;
@@ -41,20 +43,23 @@ void AngleCalculate(void)
     //角速度
 	//范围为250deg/s时，换算关系：131.2 LSB/(deg/s)
 	//使用显式读出，无需单位换算。
-    //GyroAngleSpeed=Gx;
+	MPU_Get_Gyroscope(&Gx,&Gy,&Gz);
+  GyroAngleSpeed=Gx/131.2f;
+	GyroAccle=(GyroAngleSpeed-GyroAngleSpeedBefore)/0.05f;
 
     //角度【时间差根据实际测量计算】
     //CarAngle=CarAngle+GyroAngleSpeed*0.248f;
 	
 	//直接使用DMP姿态解算数据
-		CarAngle=roll;
-    
+	CarAngle=roll;
+	GyroAngleSpeedBefore=GyroAngleSpeed;
 }
 
 //角度环控制
 void AngleControl(void)
 {
-    AngleControlOut=(CAR_ANGLE_SET-CarAngle)*AngleRingPID.P*1+\
+    AngleControlOut=(CAR_ANGLE_SET-CarAngle)*AngleRingPID.P+\
+		GyroAccle*AngleRingPID.I+\
     (CAR_ANGLE_SPEED_SET-GyroAngleSpeed)*(AngleRingPID.D);
 }
 
@@ -68,8 +73,6 @@ void MotorOutput(void)
         MotorOut+=MOTOR_OUT_DEAD_VAL;
     else if(MotorOut<-1)
         MotorOut-=MOTOR_OUT_DEAD_VAL;
-    else
-        Gyroscope_Balance_Calibration();
 
     //饱和处理
     if(MotorOut>MOTOR_OUT_MAX)

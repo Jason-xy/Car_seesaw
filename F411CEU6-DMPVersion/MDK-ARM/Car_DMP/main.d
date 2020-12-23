@@ -36,11 +36,14 @@ car_dmp\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 car_dmp\main.o: ../Core/Inc/i2c.h
 car_dmp\main.o: ../Core/Inc/tim.h
 car_dmp\main.o: ../Core/Inc/usart.h
+car_dmp\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 car_dmp\main.o: ../Core/Inc/gpio.h
 car_dmp\main.o: ..\Drivers\HW\inc\mpu6050.h
 car_dmp\main.o: ..\Drivers\HW\inc\oled.h
 car_dmp\main.o: ..\Drivers\HW\inc\motor.h
 car_dmp\main.o: ..\App\inc\control.h
 car_dmp\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+car_dmp\main.o: ..\Drivers\HW\inc\esp8266.h
+car_dmp\main.o: ..\App\inc\data_transfer.h
 car_dmp\main.o: ..\DMP\inv_mpu.h
 car_dmp\main.o: ..\DMP\inv_mpu_dmp_motion_driver.h

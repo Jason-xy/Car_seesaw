@@ -91,7 +91,6 @@ uint8_t MPU_Read_Len(uint8_t reg,uint8_t len,uint8_t *buf)
 { 
   extern I2C_HandleTypeDef MPU_I2C;
   HAL_I2C_Mem_Read(&MPU_I2C, MPU_READ, reg, I2C_MEMADD_SIZE_8BIT, buf, len, 0xfff);
-  HAL_Delay(100);
   
   return 0;	
 }
