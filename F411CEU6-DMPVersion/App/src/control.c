@@ -19,7 +19,7 @@
  #include "control.h"
 
 //全局变量
-PID AngleRingPID={2.5,-1,1}; //3，-1，1
+PID AngleRingPID={0.8,1.1,1}; //3，-1，1
 float GyroAngleSpeed=0;
 float GyroAngleSpeedBefore=0;
 float GyroAccle=0;
@@ -58,9 +58,9 @@ void AngleCalculate(void)
 //角度环控制
 void AngleControl(void)
 {
-    AngleControlOut=(CAR_ANGLE_SET-CarAngle)*AngleRingPID.P+\
+    AngleControlOut=CarAngle*AngleRingPID.P+\
 		GyroAccle*AngleRingPID.I+\
-    (CAR_ANGLE_SPEED_SET-GyroAngleSpeed)*(AngleRingPID.D);
+    GyroAngleSpeed*AngleRingPID.D;
 }
 
 //电机输出
