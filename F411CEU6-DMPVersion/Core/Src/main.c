@@ -104,7 +104,7 @@ int main(void)
 	OLED_Init();
 	OLED_Clear();
 	OLED_ShowString(28,3,(uint8_t*)"Car_Seesaw",16);
-	//esp8266_init();
+	esp8266_init();
 	Motor_Init();
 	OLED_Clear();
 	

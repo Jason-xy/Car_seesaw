@@ -26,8 +26,8 @@
 #define DIRECTION_PIN_0 GPIO_PIN_4
 #define DIRECTION_PIN_1 GPIO_PIN_5
 
-#define MOTOR_OUT_MAX 100
-#define MOTOR_OUT_MIN -100
+#define MOTOR_OUT_MAX 90
+#define MOTOR_OUT_MIN -90
 #define MOTOR_OUT_DEAD_VAL  17
 
 void SetMotorDutyCycle(float DutyCycle);//DutyCycle > 0 正转; DutyCycle < 0 反转; DutyCycle = 0 停转
