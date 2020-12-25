@@ -69,9 +69,9 @@ void MotorOutput(void)
     MotorOut=AngleControlOut;
 
     //添加死区常数
-    if(MotorOut>1)
-        MotorOut+=MOTOR_OUT_DEAD_VAL;
-    else if(MotorOut<-1)
+    if(MotorOut>1.4f)
+        MotorOut+=MOTOR_OUT_DEAD_VAL+4;
+    else if(MotorOut<-1.4f)
         MotorOut-=MOTOR_OUT_DEAD_VAL;
 
     //饱和处理
