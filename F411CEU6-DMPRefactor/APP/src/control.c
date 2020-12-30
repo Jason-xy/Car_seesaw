@@ -34,7 +34,7 @@ volatile uint8_t Channel[4] = { 0x00000000U, //TIM_CHANNEL_1
                                 0x0000000CU};//TIM_CHANNEL_4
 
 //全局变量
-PID AngleRingPID={0.8,0,1}; //3，-1，1
+PID AngleRingPID={4,0,4}; //3，-1，1
 PID SpeedRingPID={0,0,0};   //速度开环
 PID MotorRingPID[4]={{10,0.9,0},{10,0.9,0},{10,0.9,0},{10,0.9,0}};    //电机闭环
 //角度控制参数
@@ -110,7 +110,7 @@ void AngleControl(void)
 {
     AngleControlOut=CarAngle*AngleRingPID.P+\
 		GyroAccle*AngleRingPID.I+\
-    GyroAngleSpeed*AngleRingPID.D/10.0f;         //数量级10^1
+    GyroAngleSpeed*AngleRingPID.D/1.0f;         //数量级10^1
 }
 
 //电机速度捕获
@@ -149,7 +149,7 @@ void SpeedControl(void)
 	float fDelta[4];
 	for(int i=0;i<4;i++)
 	{	
-		CarSpeed[i] = SpeedOfWheel[0]; 
+		CarSpeed[i] = SpeedOfWheel[i]; 
 		CarSpeed[i] = 0.7f * CarSpeedOld[i] + 0.3f * CarSpeed[i] ;//低通滤波，使速度更平滑
 		CarSpeedOld[i] = CarSpeed[i];                                     
 		
@@ -200,7 +200,7 @@ void SpeedInnerControl(void)
 {
 	for(int i=0;i<4;i++)
 	{
-		MotorOut[i]=SpeedInnerControlCalculate(Scale(SpeedOfWheel[i], -300, 300, -100, 100),MotorOut[i],i);
+		MotorOut[i]=SpeedInnerControlCalculate(SpeedOfWheel[i],MotorOut[i],i);
 		SetMotorDutyCycle(MotorOut[i],Channel[i]);
 	}
 }
@@ -210,13 +210,13 @@ void MotorOutput(void)
 {
 	for(int i=0;i<4;i++)
 	{
-    MotorOut[i]=AngleControlOut*10.0f-SpeedControlOut[i];
-	MotorOut[i]=Scale(MotorOut[i], -300, 300, -100, 100);
+    MotorOut[i]=AngleControlOut-SpeedControlOut[i];
+	//MotorOut[i]=Scale(MotorOut[i], -300, 300, -100, 100);
 
     //添加死区常数
-    if(MotorOut[i]>1.4f)
-        MotorOut[i]+=MOTOR_OUT_DEAD_VAL+4;
-    else if(MotorOut[i]<-1.4f)
+    if(MotorOut[i]>5.4f)
+        MotorOut[i]+=MOTOR_OUT_DEAD_VAL;
+    else if(MotorOut[i]<-5.4f)
         MotorOut[i]-=MOTOR_OUT_DEAD_VAL;
 
     //饱和处理
@@ -227,6 +227,6 @@ void MotorOutput(void)
 
     SetMotorDutyCycle(MotorOut[i],Channel[i]);
 	}
-	SpeedInnerControl();//闭环输出
+	//SpeedInnerControl();//闭环输出
 }
 

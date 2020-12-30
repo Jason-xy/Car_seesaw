@@ -225,7 +225,7 @@ void TIM1_UP_TIM10_IRQHandler(void)
 	{
 		MainEventCount=0;
 		test1=TIM3->CNT;
-		SpeedInnerControl();//速度闭环控制
+		//SpeedInnerControl();//速度闭环控制
 		test1=TIM3->CNT-test1;
 	}
 	else if(MainEventCount==1)

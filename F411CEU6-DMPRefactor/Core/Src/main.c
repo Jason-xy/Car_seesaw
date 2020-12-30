@@ -105,11 +105,14 @@ int main(void)
 	OLED_Init();
 	OLED_Clear();
 	OLED_ShowString(28,3,(uint8_t*)"Car_Seesaw",16);
+	HAL_UART_Receive_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE);
 	esp8266_init();
 	Motor_Init();
 	OLED_Clear();
 	HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_1);
-	HAL_UART_Receive_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE);
+	HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_2);
+	HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_3);
+	HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_4);
 	
 	mpu_dmp_init();
 	HAL_TIM_Base_Start_IT(&htim1);
