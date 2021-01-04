@@ -71,8 +71,7 @@ void SystemClock_Config(void);
   * @brief  The application entry point.
   * @retval int
   */
-int main(void)
-{
+int main(void){
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -106,7 +105,7 @@ int main(void)
 	OLED_Clear();
 	OLED_ShowString(28,3,(uint8_t*)"Car_Seesaw",16);
 	HAL_UART_Receive_IT(&huart1, (uint8_t *)aRxBuffer, RXBUFFERSIZE);
-	esp8266_init();
+	//esp8266_init();
 	Motor_Init();
 	OLED_Clear();
 	HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_1);

@@ -220,16 +220,18 @@ void TIM1_UP_TIM10_IRQHandler(void)
 	MainEventCount++;
 	test0=TIM3->CNT;
 	mpu_dmp_get_data(&pitch,&roll,&yaw);
+	if(roll<=4.0f && roll>=-4.0f)status=1;
+	else status=0;
 	test0=TIM3->CNT-test0;
 	if(MainEventCount>=5)
 	{
 		MainEventCount=0;
 		test1=TIM3->CNT;
-		//SpeedInnerControl();//速度闭环控制
+		
 		test1=TIM3->CNT-test1;
 	}
 	else if(MainEventCount==1)
-	{	test2=TIM3->CNT;				
+	{	test2=TIM3->CNT;	
 		AngleCalculate();			 //角度环计算函数，每5ms执行一次
 		test2=TIM3->CNT-test2;
 	}

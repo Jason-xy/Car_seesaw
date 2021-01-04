@@ -59,6 +59,7 @@ extern float SpeedControlOutOld[4];
 extern float SpeedControlOutNew[4];
 extern float AngleControlOut;
 extern float MotorOut[4];
+extern int SpeedDirection;
 
 //速度控制参数
 extern short  MotorPulse[4];
@@ -75,6 +76,9 @@ extern uint8_t CapFlag[4];
 extern uint32_t CapVal[4];																	
 extern float SpeedOfWheel[4];    //°/s
 extern int cap;
+
+//状态标记
+extern int status;
 
 float Scale(float input, float inputMin, float inputMax, float outputMin, float outputMax);
 void AngleCalculate(void);

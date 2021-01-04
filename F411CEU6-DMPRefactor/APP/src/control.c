@@ -34,13 +34,15 @@ volatile uint8_t Channel[4] = { 0x00000000U, //TIM_CHANNEL_1
                                 0x0000000CU};//TIM_CHANNEL_4
 
 //全局变量
-PID AngleRingPID={4,0,4}; //3，-1，1
-PID SpeedRingPID={0,0,0};   //速度开环
-PID MotorRingPID[4]={{10,0.9,0},{10,0.9,0},{10,0.9,0},{10,0.9,0}};    //电机闭环
+PID AngleRingPID={10,-0,4}; //0.8 0 0.4
+PID SpeedRingPID={0,0,0};   //速度开环50 10 0
+const float P=10,I=0.05,D=0;
+PID MotorRingPID[4]={{P,I,D},{P,I,D},{P,I,D},{P,I,D}};    //电机闭环
 //角度控制参数
 float GyroAngleSpeed=0;
 float GyroAngleSpeedBefore=0;
 float GyroAccle=0;
+float GyroAccleBefore=0;
 float CarAngle=0;
 float CarAngleOld=0;
 
@@ -53,6 +55,7 @@ float MotorOut[4]={0};
 float ErrorRrev[4]={0};
 float PWMBais[4]={0};
 float PWM[4]={0};
+int SpeedDirection=0;
 
 //速度控制参数
 short  MotorPulse[4]={0};
@@ -69,6 +72,9 @@ uint8_t CapFlag[4] = { 0 };
 uint32_t CapVal[4] = { 0 };																	
 float SpeedOfWheel[4]={0};    //°/s
 int cap = 0;
+
+//状态标记
+int status=0;
 
 //量程归一化处理
 float Scale(float input, float inputMin, float inputMax, float outputMin, float outputMax)
@@ -94,8 +100,9 @@ void AngleCalculate(void)
 	//使用显式读出，无需单位换算。
 	if(roll-CarAngle<0.001f||CarAngle-roll<0.001f)
 	CarAngle=roll;
-	GyroAngleSpeed=(CarAngle*1000-CarAngleOld*1000)/5.0f;
-	GyroAccle=(GyroAngleSpeed-GyroAngleSpeedBefore)/0.05f;
+	GyroAngleSpeed=(CarAngle*1000-CarAngleOld*1000)/5.0f*0.7f+0.3f*GyroAngleSpeedBefore;
+	GyroAccle=(GyroAngleSpeed-GyroAngleSpeedBefore)/0.05f*0.7f+0.3f*GyroAccleBefore;
+	if(GyroAccle<0)GyroAccle=-GyroAccle;
 
     //角度【时间差根据实际测量计算】
     //CarAngle=CarAngle+GyroAngleSpeed*0.248f;
@@ -103,13 +110,13 @@ void AngleCalculate(void)
 	//直接使用DMP姿态解算数据
 	CarAngleOld=CarAngle;                        //[-5~5]
 	GyroAngleSpeedBefore=GyroAngleSpeed;
+	GyroAccleBefore=GyroAccle;
 }
 
 //角度环控制
 void AngleControl(void)
 {
     AngleControlOut=CarAngle*AngleRingPID.P+\
-		GyroAccle*AngleRingPID.I+\
     GyroAngleSpeed*AngleRingPID.D/1.0f;         //数量级10^1
 }
 
@@ -124,12 +131,27 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			switch(CapFlag[i])
 			{//读取当前通道的状态				
 				case 0://没有读到过中断
+					if(htim->Channel == TIM_CHANNEL_3)
+					//SpeedDirection=HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_2);
 					__HAL_TIM_SET_COUNTER(htim,0);  //计数器置0
 					CapFlag[i]++;  //修改捕获状态为捕获过一次
 					break;
 				case 1:
-					CapVal[i] = HAL_TIM_ReadCapturedValue(htim,Channel[i]); //读取计数器值	
-					SpeedOfWheel[i]=375000/CapVal[i];//360*10^6/(Cap*960)
+					if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_2))
+					{
+						if(htim->Channel == ActiveChannel[2])
+						SpeedDirection=1;
+					}
+					else if(htim->Channel == ActiveChannel[2])
+						SpeedDirection=0;
+					CapVal[i] = HAL_TIM_ReadCapturedValue(htim,Channel[i]); //读取计数器值
+					if(CapVal[i]>750)
+					{
+						if(SpeedDirection==1)
+						SpeedOfWheel[i]=375000/CapVal[i];//360*10^6/(Cap*960)  捕获预分频器设置为8
+						else
+						SpeedOfWheel[i]=0.0f-375000/CapVal[i];
+					}
 					CapFlag[i] = 0;    //重置捕获状
 					break;
 			}	
@@ -149,7 +171,11 @@ void SpeedControl(void)
 	float fDelta[4];
 	for(int i=0;i<4;i++)
 	{	
-		CarSpeed[i] = SpeedOfWheel[i]; 
+		if(SpeedOfWheel[i]>1000||SpeedOfWheel[i]<-1000)
+		CarSpeed[i]=0;
+		else
+		CarSpeed[i] = SpeedOfWheel[i];
+		SpeedOfWheel[i]=0;
 		CarSpeed[i] = 0.7f * CarSpeedOld[i] + 0.3f * CarSpeed[i] ;//低通滤波，使速度更平滑
 		CarSpeedOld[i] = CarSpeed[i];                                     
 		
@@ -186,12 +212,13 @@ void SpeedControlOutput(void)
 float SpeedInnerControlCalculate(short Pulse,int Target,int MotorNum)
 {
 	int Error;
+	PWM[MotorNum]=Target;
 	Error=Pulse-Target;
-	PWMBais[MotorNum]=MotorRingPID[MotorNum].P*(Error-ErrorRrev[MotorNum])+MotorRingPID[MotorNum].I*Error;
+	PWMBais[MotorNum]=MotorRingPID[MotorNum].I*(Error-ErrorRrev[MotorNum])+MotorRingPID[MotorNum].P*Error;
 	ErrorRrev[MotorNum]=Error;
 	PWM[MotorNum]+=PWMBais[MotorNum];
-	if(PWM[MotorNum]>100)PWM[MotorNum]=100;
-	if(PWM[MotorNum]<-100)PWM[MotorNum]=-100;
+	if(PWM[MotorNum]>MOTOR_OUT_MAX)PWM[MotorNum]=MOTOR_OUT_MAX;
+	if(PWM[MotorNum]<MOTOR_OUT_MIN)PWM[MotorNum]=MOTOR_OUT_MAX;
 	return PWM[MotorNum];
 }
 
@@ -200,8 +227,8 @@ void SpeedInnerControl(void)
 {
 	for(int i=0;i<4;i++)
 	{
-		MotorOut[i]=SpeedInnerControlCalculate(SpeedOfWheel[i],MotorOut[i],i);
-		SetMotorDutyCycle(MotorOut[i],Channel[i]);
+		PWM[i]=SpeedInnerControlCalculate(SpeedOfWheel[i]/2,MotorOut[i],i);
+		SetMotorDutyCycle(PWM[i],Channel[i]);
 	}
 }
 
@@ -210,23 +237,34 @@ void MotorOutput(void)
 {
 	for(int i=0;i<4;i++)
 	{
-    MotorOut[i]=AngleControlOut-SpeedControlOut[i];
+    MotorOut[i]=AngleControlOut-SpeedControlOut[i]/100.0f;
 	//MotorOut[i]=Scale(MotorOut[i], -300, 300, -100, 100);
 
     //添加死区常数
-    if(MotorOut[i]>5.4f)
+    if(MotorOut[i]>7.0f)
         MotorOut[i]+=MOTOR_OUT_DEAD_VAL;
-    else if(MotorOut[i]<-5.4f)
+    else if(MotorOut[i]<-7.0f)
         MotorOut[i]-=MOTOR_OUT_DEAD_VAL;
+		
+		if(GyroAccle>10||GyroAccle<-10)
+		{
+			if(CarAngle>0.5f)
+			MotorOut[i]+=GyroAccle*AngleRingPID.I;
+			else if(CarAngle<-0.5f)
+			MotorOut[i]-=GyroAccle*AngleRingPID.I;
+		}
 
     //饱和处理
     if(MotorOut[i]>MOTOR_OUT_MAX)
         MotorOut[i]=MOTOR_OUT_MAX;
     if(MotorOut[i]<MOTOR_OUT_MIN)
         MotorOut[i]=MOTOR_OUT_MIN;
-
-    SetMotorDutyCycle(MotorOut[i],Channel[i]);
+//		if(i==0)
+//		MotorOut[0]+=50;
+//		if(MotorOut[i]<-5)MotorOut[i]-=10;
+//    SetMotorDutyCycle(MotorOut[i],Channel[i]);
 	}
+	SpeedInnerControl();//速度闭环控制
 	//SpeedInnerControl();//闭环输出
 }
 
