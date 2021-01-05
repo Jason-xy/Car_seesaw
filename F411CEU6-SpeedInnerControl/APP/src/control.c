@@ -34,9 +34,9 @@ volatile uint8_t Channel[4] = { 0x00000000U, //TIM_CHANNEL_1
                                 0x0000000CU};//TIM_CHANNEL_4
 
 //全局变量
-PID AngleRingPID={20,-0,4}; //0.8 0 0.4
+PID AngleRingPID={20,0,40}; //40 0 20   20  40
 PID SpeedRingPID={0,0,0};   //速度开环50 10 0
-PID MotorRingPID={15,0,0};    //电机闭环
+PID MotorRingPID={6,0,0};    //电机闭环56
 //角度控制参数
 float GyroAngleSpeed=0;
 float GyroAngleSpeedBefore=0;
@@ -171,7 +171,7 @@ float SpeedInnerControlCalculate(short Pulse,int Target)
 //速度闭环控制
 void SpeedInnerControl(void)
 {
-		PWM=SpeedInnerControlCalculate(CarSpeed*2,MotorOut);
+		PWM=SpeedInnerControlCalculate(CarSpeed,MotorOut);
 		SetMotorDutyCycle(PWM,Channel[0]);
 		SetMotorDutyCycle(PWM,Channel[1]);
 		SetMotorDutyCycle(PWM,Channel[2]);

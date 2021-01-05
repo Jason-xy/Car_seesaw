@@ -241,9 +241,9 @@ void TIM1_UP_TIM10_IRQHandler(void)
 	{
 		SpeedControlCount++;
 		SpeedControlPeriod++;
+		getSpeed();
     	if(SpeedControlCount >= 5)//25ms
-    	{	test4=TIM1->CNT;
-			getSpeed();			
+    	{	test4=TIM1->CNT;			
       		SpeedControl();          //速度控制函数，每25ms调用一次
 			SpeedControlOutput();
       		SpeedControlCount=0;
