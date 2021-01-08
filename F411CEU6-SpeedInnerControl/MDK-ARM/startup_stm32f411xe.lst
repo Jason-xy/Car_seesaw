@@ -736,9 +736,9 @@ ARM Macro Assembler    Page 12
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
 interwork --depend=car_uestc2020\startup_stm32f411xe.d -ocar_uestc2020\startup_
 stm32f411xe.o -I.\RTE\_Car_UESTC2020 -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.7.0\CMSI
-S\Core\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.14.0\Drivers\CMSIS\De
+S\Core\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\De
 vice\ST\STM32F4xx\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISIO
-N_VERSION SETA 531" --predefine="_RTE_ SETA 1" --predefine="STM32F411xE SETA 1"
+N_VERSION SETA 532" --predefine="_RTE_ SETA 1" --predefine="STM32F411xE SETA 1"
  --predefine="_RTE_ SETA 1" --list=startup_stm32f411xe.lst startup_stm32f411xe.
 s
 

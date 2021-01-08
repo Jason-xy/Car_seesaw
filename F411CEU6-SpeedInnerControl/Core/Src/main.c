@@ -124,10 +124,10 @@ int main(void)
   {
 		OLED_ShowNum(48,4,roll,4,16);
 		ANO_DT_Send_Status(roll,pitch,yaw,1,122,233);
-		ANO_DT_Send_RCData(SpeedOfWheel[0]*100,SpeedOfWheel[1]*100,SpeedOfWheel[2]*100,SpeedOfWheel[3]*100,\
+		ANO_DT_Send_RCData(SpeedOfWheel[0]*100,SpeedOfWheel[1]*100,SpeedOfWheel[0]*100,SpeedOfWheel[1]*100,\
 			AngleRingPID.P*100,AngleRingPID.I*100,AngleRingPID.D*100,\
 			SpeedRingPID.P*100,SpeedRingPID.I*100,SpeedRingPID.D*100);
-	  HAL_Delay(10);
+		HAL_Delay(10);
 		ANO_DT_PIDControl();//ÐÞ¸ÄPID
     /* USER CODE END WHILE */
 

@@ -34,14 +34,14 @@ volatile uint8_t Channel[4] = { 0x00000000U, //TIM_CHANNEL_1
                                 0x0000000CU};//TIM_CHANNEL_4
 
 //全局变量
-PID AngleRingPID={20,0,40}; //40 0 20   20  40
-PID SpeedRingPID={0,0,0};   //速度开环50 10 0
-PID MotorRingPID={6,0,0};    //电机闭环56
+PID AngleRingPID={20,0,60}; //40 0 20   20  40                  [20,0,40]
+PID SpeedRingPID={0,0,0};   //速度开环50 10 0                   [0,0,0]
+PID MotorRingPID={3,0,0};    //电机闭环5 6                      [6,0,0]
 //角度控制参数
 float GyroAngleSpeed=0;
-float GyroAngleSpeedBefore=0;
+float GyroAngleSpeedOld=0;
 float GyroAccle=0;
-float GyroAccleBefore=0;
+float GyroAccleOld=0;
 float CarAngle=0;
 float CarAngleOld=0;
 
@@ -54,7 +54,6 @@ float MotorOut=0;
 float ErrorRrev=0;
 float PWMBais=0;
 float PWM=0;
-int SpeedDirection=0;
 
 //速度控制参数
 short  MotorPulse=0;
@@ -66,14 +65,9 @@ float CarSpeedSet=0;
 float CarSpeedOld=0;
 float CarPosition=0;
 
-//电机脉冲捕获
-uint8_t CapFlag[4] = { 0 };
-uint32_t CapVal[4] = { 0 };																	
-float SpeedOfWheel[4]={0};    //°/s
-int cap = 0;
+//电机脉冲捕获																	
+float SpeedOfWheel[2]={0};    //°/s
 
-//状态标记
-int status=0;
 
 //量程归一化处理
 float Scale(float input, float inputMin, float inputMax, float outputMin, float outputMax)
@@ -94,39 +88,36 @@ float Scale(float input, float inputMin, float inputMax, float outputMin, float 
 //角度环计算
 void AngleCalculate(void)
 {
-    //角速度
+    //角度
 	//范围为2000deg/s时，换算关系：131.2 LSB/(deg/s)
-	//使用显式读出，无需单位换算。
+	//直接使用DMP姿态解算数据
 	if(roll-CarAngle<0.001f||CarAngle-roll<0.001f)
 	CarAngle=roll;
-	GyroAngleSpeed=(CarAngle*1000-CarAngleOld*1000)/5.0f*0.7f+0.3f*GyroAngleSpeedBefore;
-	GyroAccle=(GyroAngleSpeed-GyroAngleSpeedBefore)/0.05f*0.7f+0.3f*GyroAccleBefore;
-	if(GyroAccle<0)GyroAccle=-GyroAccle;
-
-    //角度【时间差根据实际测量计算】
-    //CarAngle=CarAngle+GyroAngleSpeed*0.248f;
 	
-	//直接使用DMP姿态解算数据
+	//低通滤波
+	GyroAngleSpeed=(CarAngle*1000-CarAngleOld*1000)/5.0f*0.7f+0.3f*GyroAngleSpeedOld;
+	GyroAccle=(GyroAngleSpeed-GyroAngleSpeedOld)/0.05f*0.7f+0.3f*GyroAccleOld;
+	
+	//if(GyroAccle<0)GyroAccle=-GyroAccle;
+	
+	
 	CarAngleOld=CarAngle;                        //[-5~5]
-	GyroAngleSpeedBefore=GyroAngleSpeed;
-	GyroAccleBefore=GyroAccle;
+	GyroAngleSpeedOld=GyroAngleSpeed;
+	GyroAccleOld=GyroAccle;
 }
 
 //角度环控制
 void AngleControl(void)
 {
     AngleControlOut=CarAngle*AngleRingPID.P+\
-    GyroAngleSpeed*AngleRingPID.D/1.0f;         //数量级10^1
+    GyroAngleSpeed*AngleRingPID.D/10.0f;         //数量级10^1
 }
 
 //速度开环计算									//目标转动速度0
 void SpeedControl(void)
 {
   float fP,fI;   	
-	float fDelta;	
-		CarSpeed = (SpeedOfWheel[0]+SpeedOfWheel[1])/2;
-		CarSpeed = 0.7f * CarSpeedOld + 0.3f * CarSpeed ;//低通滤波，使速度更平滑
-		CarSpeedOld = CarSpeed;                                     
+	float fDelta;	                                     
 		
 		fDelta = CAR_SPEED_SET;
 		fDelta -= CarSpeed;            //数量级10
@@ -154,7 +145,7 @@ void SpeedControlOutput(void)
 		
 }
 
-//速度闭环计算 4路电机
+//速度闭环计算 2路电机
 float SpeedInnerControlCalculate(short Pulse,int Target)
 {
 	int Error;
@@ -171,11 +162,12 @@ float SpeedInnerControlCalculate(short Pulse,int Target)
 //速度闭环控制
 void SpeedInnerControl(void)
 {
-		PWM=SpeedInnerControlCalculate(CarSpeed,MotorOut);
-		SetMotorDutyCycle(PWM,Channel[0]);
-		SetMotorDutyCycle(PWM,Channel[1]);
-		SetMotorDutyCycle(PWM,Channel[2]);
-		SetMotorDutyCycle(PWM,Channel[3]);
+	getSpeed();
+	PWM=SpeedInnerControlCalculate(CarSpeed,MotorOut);
+	SetMotorDutyCycle(PWM,Channel[0]);
+	SetMotorDutyCycle(PWM,Channel[1]);
+	SetMotorDutyCycle(PWM,Channel[2]);
+	SetMotorDutyCycle(PWM,Channel[3]);
 }
 
 //电机输出
@@ -188,14 +180,6 @@ void MotorOutput(void)
         MotorOut+=MOTOR_OUT_DEAD_VAL;
     else if(MotorOut<-27.0f)
         MotorOut-=MOTOR_OUT_DEAD_VAL;
-		
-		if(GyroAccle>10||GyroAccle<-10)
-		{
-			if(CarAngle>0.5f)
-			MotorOut+=GyroAccle*AngleRingPID.I;
-			else if(CarAngle<-0.5f)
-			MotorOut-=GyroAccle*AngleRingPID.I;
-		}
 
     //饱和处理
     if(MotorOut>MOTOR_OUT_MAX)
@@ -212,5 +196,8 @@ void getSpeed(void)
 	SpeedOfWheel[1] = (short)(__HAL_TIM_GET_COUNTER(&htim3));
 	__HAL_TIM_SET_COUNTER(&htim4,0);//再计数器清零
 	__HAL_TIM_SET_COUNTER(&htim3,0);
+	CarSpeed = (SpeedOfWheel[0]+SpeedOfWheel[1])/2;
+	CarSpeed = 0.7f * CarSpeedOld + 0.3f * CarSpeed ;//低通滤波，使速度更平滑
+	CarSpeedOld = CarSpeed;
 }
 

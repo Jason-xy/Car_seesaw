@@ -48,7 +48,7 @@ extern PID MotorRingPID;
 
 //角度控制参数
 extern float GyroAngleSpeed;
-extern float GyroAngleSpeedBefore;
+extern float GyroAngleSpeedOld;
 extern float GyroAccle;
 extern float CarAngle;
 extern float CarAngleOld;
@@ -59,7 +59,6 @@ extern float SpeedControlOutOld;
 extern float SpeedControlOutNew;
 extern float AngleControlOut;
 extern float MotorOut;
-extern int SpeedDirection;
 
 //速度控制参数
 extern short  MotorPulse;
@@ -71,14 +70,9 @@ extern float CarSpeedSet;
 extern float CarSpeedOld;
 extern float CarPosition;
 
-//电机脉冲捕获
-extern uint8_t CapFlag[4];
-extern uint32_t CapVal[4];																	
-extern float SpeedOfWheel[4];    //°/s
-extern int cap;
+//电机脉冲捕获																	
+extern float SpeedOfWheel[2];   
 
-//状态标记
-extern int status;
 
 float Scale(float input, float inputMin, float inputMax, float outputMin, float outputMax);
 void AngleCalculate(void);
