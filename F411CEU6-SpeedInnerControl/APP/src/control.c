@@ -34,9 +34,9 @@ volatile uint8_t Channel[4] = { 0x00000000U, //TIM_CHANNEL_1
                                 0x0000000CU};//TIM_CHANNEL_4
 
 //全局变量
-PID AngleRingPID={20,0,60}; //40 0 20   20  40                  [20,0,40]
-PID SpeedRingPID={0,0,0};   //速度开环50 10 0                   [0,0,0]
-PID MotorRingPID={3,0,0};    //电机闭环5 6                      [6,0,0]
+PID AngleRingPID={8,0,80}; //40 0 20   20  40                  [20,0,40]					[13,0,60]		[11,0,80]			[8,0,80]
+PID SpeedRingPID={0,0,0};   //速度开环50 10 0                   [0,0,0]						[0,0,0]
+PID MotorRingPID={2.8,0.53,0};    //电机闭环5 6                      [6,0,0]				[6.6,0.5,0]  [2.5,0.5,0]	[2.8,0.53]
 //角度控制参数
 float GyroAngleSpeed=0;
 float GyroAngleSpeedOld=0;
@@ -67,6 +67,8 @@ float CarPosition=0;
 
 //电机脉冲捕获																	
 float SpeedOfWheel[2]={0};    //°/s
+
+int PWM_OUT_DEAD_VAL=25;
 
 
 //量程归一化处理
@@ -154,8 +156,12 @@ float SpeedInnerControlCalculate(short Pulse,int Target)
 	PWMBais=MotorRingPID.P*(Error-ErrorRrev)+MotorRingPID.I*Error;
 	ErrorRrev=Error;
 	PWM+=PWMBais;
-	if(PWM>MOTOR_OUT_MAX)PWM=MOTOR_OUT_MAX+300;
-	if(PWM<MOTOR_OUT_MIN)PWM=MOTOR_OUT_MIN-300;
+	if(PWM>MOTOR_OUT_MAX+300)PWM=MOTOR_OUT_MAX+300;
+	if(PWM<MOTOR_OUT_MIN-300)PWM=MOTOR_OUT_MIN-300;
+	if(PWM>27.0f)
+	 PWM+=200;
+  else if(MotorOut<-27.0f)
+		PWM-=(200+PWM_OUT_DEAD_VAL);
 	return PWM;
 }
 

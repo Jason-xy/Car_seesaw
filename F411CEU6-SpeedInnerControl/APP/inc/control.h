@@ -31,6 +31,8 @@
 #define CAR_POSITION_MIN	(-900) 
 #define SPEED_CONTROL_PERIOD	 25	    //速度环控制周期
 
+extern int PWM_OUT_DEAD_VAL;
+
 extern unsigned char SpeedControlCount;
 extern unsigned char SpeedControlPeriod;
 
