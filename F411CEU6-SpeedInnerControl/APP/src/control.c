@@ -34,9 +34,9 @@ volatile uint8_t Channel[4] = { 0x00000000U, //TIM_CHANNEL_1
                                 0x0000000CU};//TIM_CHANNEL_4
 
 //全局变量
-PID AngleRingPID={8,0,80}; //40 0 20   20  40                  [20,0,40]					[13,0,60]		[11,0,80]			[8,0,80]
+PID AngleRingPID={6,0,80}; //40 0 20   20  40                  [20,0,40]					[13,0,60]		[11,0,80]			[8,0,80]
 PID SpeedRingPID={0,0,0};   //速度开环50 10 0                   [0,0,0]						[0,0,0]
-PID MotorRingPID={2.8,0.53,0};    //电机闭环5 6                      [6,0,0]				[6.6,0.5,0]  [2.5,0.5,0]	[2.8,0.53]
+PID MotorRingPID={3.05,0.53,0};    //电机闭环5 6                      [6,0,0]				[6.6,0.5,0]  [2.5,0.5,0]	[2.8,0.53]
 //角度控制参数
 float GyroAngleSpeed=0;
 float GyroAngleSpeedOld=0;
