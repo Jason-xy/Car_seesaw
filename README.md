@@ -120,4 +120,4 @@ u8 mpu_dmp_init(void)
 ## 测试视频
 
 [![20210211100554.png](https://wpcos-1300629776.cos.ap-chengdu.myqcloud.com/Gallery/2021/02/11/20210211100554.png)]({https://www.bilibili.com/video/BV18v4y1Z7j7/} "Car_seesaw")
-
+视频地址：https://www.bilibili.com/video/BV18v4y1Z7j7/
